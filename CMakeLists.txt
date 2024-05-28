@@ -50,14 +50,15 @@ option(PNG_HARDWARE_OPTIMIZATIONS "Enable hardware optimizations" ON)
 
 # Allow the users to specify an application-specific API prefix for libpng
 # vendoring purposes. A standard libpng build should have no such prefix.
-set(PNG_ZLIB_INCLUDE_DIRS ""
-    CACHE STRING "Prefix to prepend to the API function names")
+set(PNG_ZLIB_INCLUDE_DIR "" CACHE STRING "Prefix to prepend to the API function names")
+set(PNG_ZLIB_GEN_INCLUDE_DIR "" CACHE STRING "Prefix to prepend to the API function names")
 
-if(PNG_ZLIB_INCLUDE_DIRS STREQUAL "")
-  message(SEND_ERROR "The option PNG_ZLIB_INCLUDE_DIRS is not set!")
+if(PNG_ZLIB_INCLUDE_DIR STREQUAL "")
+  message(SEND_ERROR "The option PNG_ZLIB_INCLUDE_DIR is not set!")
 endif()
 
-message(STATUS "PNG_ZLIB_INCLUDE_DIRS=${PNG_ZLIB_INCLUDE_DIRS}")
+message(STATUS "PNG_ZLIB_INCLUDE_DIR=${PNG_ZLIB_INCLUDE_DIR}")
+message(STATUS "PNG_ZLIB_GEN_INCLUDE_DIR=${PNG_ZLIB_GEN_INCLUDE_DIR}")
 
 if(UNIX AND NOT APPLE AND NOT BEOS AND NOT HAIKU AND NOT EMSCRIPTEN)
   find_library(M_LIBRARY m)
@@ -409,7 +410,7 @@ if(PNG_STATIC)
                         OUTPUT_NAME "${PNG_STATIC_OUTPUT_NAME}")
   target_include_directories(png_static
                              PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-                             PRIVATE ${PNG_ZLIB_INCLUDE_DIRS})
+                             PRIVATE ${PNG_ZLIB_INCLUDE_DIR} ${PNG_ZLIB_GEN_INCLUDE_DIR})
   target_include_directories(png_static SYSTEM
                              INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/libpng${PNGLIB_ABI_VERSION}>)
   if (M_LIBRARY)
