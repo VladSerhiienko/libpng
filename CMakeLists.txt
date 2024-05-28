@@ -57,6 +57,8 @@ if(PNG_ZLIB_INCLUDE_DIRS STREQUAL "")
   message(SEND_ERROR "The option PNG_ZLIB_INCLUDE_DIRS is not set!")
 endif()
 
+message(STATUS "PNG_ZLIB_INCLUDE_DIRS=${PNG_ZLIB_INCLUDE_DIRS}")
+
 if(UNIX AND NOT APPLE AND NOT BEOS AND NOT HAIKU AND NOT EMSCRIPTEN)
   find_library(M_LIBRARY m)
   if(M_LIBRARY)
@@ -406,7 +408,8 @@ if(PNG_STATIC)
   set_target_properties(png_static PROPERTIES
                         OUTPUT_NAME "${PNG_STATIC_OUTPUT_NAME}")
   target_include_directories(png_static
-                             PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> "${PNG_ZLIB_INCLUDE_DIRS}")
+                             PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+                             PRIVATE ${PNG_ZLIB_INCLUDE_DIRS})
   target_include_directories(png_static SYSTEM
                              INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/libpng${PNGLIB_ABI_VERSION}>)
   if (M_LIBRARY)
